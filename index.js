@@ -3,7 +3,8 @@ let reset = document.querySelector("#reset");
 let newgame = document.querySelector(".newgame");
 let winner1 = document.querySelector(".msg-container");
 let msg = document.querySelector("#msg");
-
+let winSounud = document.querySelector("#win-sounud")
+let lossgame = document.querySelector("#gameover")
 let turnO = true; // playerX , playerO
 
 
@@ -20,10 +21,13 @@ const win = [
 ];
 
 const restGame = () => {
+   
     turnO =true;
     enablebox();
     newgame.classList.add("hide");
     winner1.classList.add("hide");
+   
+
 }
 boxes.forEach((box)=>{
     box.addEventListener("click" , ()=>{
@@ -59,13 +63,18 @@ const showWinner = (winner)=>{
     msg.innerText =`Congralations , Winner is ${winner}`;
      newgame.classList.remove("hide");
      winner1.classList.remove("hide");
+     winSounud.play();
+     msg.classList.add("celebrate")
     disablebox();
     };
 
 
 function noWinner(){
-    msg.innerText = "tie match";
+    msg.innerText = "Tie match";
+    newgame.classList.remove("hide");
     winner1.classList.remove("hide");
+    disablebox();
+     gameover.play();
 }
 function userwinner (){
 for( let user of win){
@@ -77,11 +86,17 @@ for( let user of win){
         if(pos1val==pos2val && pos2val==pos3val){
             console.log("winner" , pos1val);
           showWinner(pos1val);
+          return ;
         }
     }
   }
+  const allboxsFilled = Array.from(boxes).every(box=> box.innerText !== "");
+    if(allboxsFilled){
+       noWinner();
+    }
+   
+    
 };
-
 
 newgame.addEventListener("click" , restGame);
 reset.addEventListener("click" , restGame );
